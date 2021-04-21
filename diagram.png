@@ -1,0 +1,479 @@
+@startuml
+set namespaceSeparator ::
+
+class "hair_care_tracker::controller::calendar_view_controller.dart::CalendarViewController" {
+  +RoutineService routineService
+  +dynamic getRoutines()
+}
+
+"hair_care_tracker::controller::calendar_view_controller.dart::CalendarViewController" o-- "hair_care_tracker::service::routine_service.dart::RoutineService"
+
+class "hair_care_tracker::controller::home_controller.dart::HomeController" {
+  +bool logOut()
+}
+
+class "hair_care_tracker::controller::log_in_controller.dart::LogInController" {
+  +SecurityService securityService
+  +dynamic logIn()
+}
+
+"hair_care_tracker::controller::log_in_controller.dart::LogInController" o-- "hair_care_tracker::service::security_service.dart::SecurityService"
+
+class "hair_care_tracker::controller::my_products_controller.dart::MyProductsController" {
+  +ProductService service
+  +dynamic getProducts()
+  +void saveProductsList()
+}
+
+"hair_care_tracker::controller::my_products_controller.dart::MyProductsController" o-- "hair_care_tracker::service::product_service.dart::ProductService"
+
+class "hair_care_tracker::controller::owned_products_controller.dart::OwnedProductsController" {
+  +List getProducts()
+}
+
+class "hair_care_tracker::controller::profile_controller.dart::ProfileController" {
+  +ProfileService service
+  +String validateAge()
+  +dynamic getProfile()
+  +void saveProfile()
+}
+
+"hair_care_tracker::controller::profile_controller.dart::ProfileController" o-- "hair_care_tracker::service::profile_service.dart::ProfileService"
+
+class "hair_care_tracker::controller::routine_controller.dart::RoutineController" {
+  +RoutineService service
+  +void saveRoutine()
+}
+
+"hair_care_tracker::controller::routine_controller.dart::RoutineController" o-- "hair_care_tracker::service::routine_service.dart::RoutineService"
+
+class "hair_care_tracker::controller::search_product_controller.dart::SearchProductController" {
+  +ProductService service
+  +dynamic getAvailableProducts()
+}
+
+"hair_care_tracker::controller::search_product_controller.dart::SearchProductController" o-- "hair_care_tracker::service::product_service.dart::ProductService"
+
+class "hair_care_tracker::controller::sign_up_controller.dart::SignUpController" {
+  +SecurityService securityService
+  +String validateNickname()
+  +String validateEmail()
+  +String validatePassword()
+  +String validateRepeatPassword()
+  +dynamic signUp()
+}
+
+"hair_care_tracker::controller::sign_up_controller.dart::SignUpController" o-- "hair_care_tracker::service::security_service.dart::SecurityService"
+
+class "hair_care_tracker::exception::incorrect_password_exception.dart::IncorrectPasswordException" {
+  +String cause
+}
+
+"dart::core::Exception" <|-- "hair_care_tracker::exception::incorrect_password_exception.dart::IncorrectPasswordException"
+
+class "hair_care_tracker::exception::invalid_email_exception.dart::InvalidEmailException" {
+  +String cause
+}
+
+"dart::core::Exception" <|-- "hair_care_tracker::exception::invalid_email_exception.dart::InvalidEmailException"
+
+class "hair_care_tracker::exception::nickname_taken_exception.dart::NicknameTakenException" {
+  +String cause
+}
+
+"dart::core::Exception" <|-- "hair_care_tracker::exception::nickname_taken_exception.dart::NicknameTakenException"
+
+class "hair_care_tracker::exception::server_error_exception.dart::ServerErrorException" {
+  +String cause
+}
+
+"dart::core::Exception" <|-- "hair_care_tracker::exception::server_error_exception.dart::ServerErrorException"
+
+class "hair_care_tracker::exception::user_exists_exception.dart::UserExistsException" {
+  +String cause
+}
+
+"dart::core::Exception" <|-- "hair_care_tracker::exception::user_exists_exception.dart::UserExistsException"
+
+class "hair_care_tracker::main.dart::EntryPoint" {
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "hair_care_tracker::main.dart::EntryPoint"
+
+class "hair_care_tracker::model::ingredient.dart::Ingredient" {
+  -String _name
+  -String _category
+  +String name
+  +String category
+  +Ingredient clone()
+  +String toString()
+}
+
+class "hair_care_tracker::model::product.dart::Product" {
+  -String _name
+  -String _brand
+  -List<Ingredient> _ingredients
+  -int _capacity
+  -String _description
+  +String name
+  +String description
+  +int capacity
+  +List<Ingredient> ingredients
+  +String brand
+  +Product clone()
+  +String toString()
+}
+
+class "hair_care_tracker::model::profile.dart::Profile" {
+  -String _age
+  -String _length
+  -String _porosity
+  -String _state
+  -String _curlType
+  -String _thickness
+  -String _denseness
+  -String _problems
+  +String problems
+  +String denseness
+  +String thickness
+  +String curlType
+  +String porosity
+  +String length
+  +String age
+  +String state
+  +String toString()
+  +Map toJson()
+}
+
+class "hair_care_tracker::model::routine.dart::Routine" {
+  -List<Product> _products
+  -String _effects
+  -DateTime _date
+  -String _description
+  -String _name
+  +String name
+  +String description
+  +DateTime date
+  +String effects
+  +List<Product> products
+  +Routine clone()
+  +String toString()
+}
+
+class "hair_care_tracker::service::hash_service.dart::HashService" {
+  {static} +String hashPassword()
+}
+
+class "hair_care_tracker::service::product_service.dart::ProductService" {
+  +dynamic getDatabaseProducts()
+  +dynamic getUserProducts()
+  +void putUserProducts()
+}
+
+class "hair_care_tracker::service::profile_service.dart::ProfileService" {
+  +dynamic getProfile()
+  +void putProfile()
+}
+
+class "hair_care_tracker::service::routine_service.dart::RoutineService" {
+  +dynamic getUserRoutines()
+  +void putRoutine()
+}
+
+class "hair_care_tracker::service::security_service.dart::SecurityService" {
+  +dynamic logInRequest()
+  +dynamic signUpRequest()
+}
+
+class "hair_care_tracker::view::calendar_view.dart::CalendarView" {
+  +_CalendarViewState createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "hair_care_tracker::view::calendar_view.dart::CalendarView"
+
+class "hair_care_tracker::view::calendar_view.dart::_CalendarViewState" {
+  -Map<DateTime, List> _events
+  +FlutterSecureStorage storage
+  +List<Routine> routines
+  +CalendarController calendarController
+  -CalendarViewController _calendarViewController
+  +void initState()
+  +dynamic initialize()
+  +Widget build()
+  -Widget _calendarBuilder()
+  +void dispose()
+}
+
+"hair_care_tracker::view::calendar_view.dart::_CalendarViewState" o-- "flutter_secure_storage::flutter_secure_storage.dart::FlutterSecureStorage"
+"hair_care_tracker::view::calendar_view.dart::_CalendarViewState" o-- "table_calendar::table_calendar.dart::CalendarController"
+"hair_care_tracker::view::calendar_view.dart::_CalendarViewState" o-- "hair_care_tracker::controller::calendar_view_controller.dart::CalendarViewController"
+"flutter::src::widgets::framework.dart::State<T>" <|-- "hair_care_tracker::view::calendar_view.dart::_CalendarViewState"
+
+class "hair_care_tracker::view::home_view.dart::HomeView" {
+  +_HomeViewState createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "hair_care_tracker::view::home_view.dart::HomeView"
+
+class "hair_care_tracker::view::home_view.dart::_HomeViewState" {
+  -HomeController _homeController
+  +FlutterSecureStorage storage
+  +Widget build()
+  -Widget _profileBtnBuilder()
+  -Widget _calendarBtnBuilder()
+  -Widget _myProductsBtnBuilder()
+  -Widget _logOutBtnBuilder()
+}
+
+"hair_care_tracker::view::home_view.dart::_HomeViewState" o-- "hair_care_tracker::controller::home_controller.dart::HomeController"
+"hair_care_tracker::view::home_view.dart::_HomeViewState" o-- "flutter_secure_storage::flutter_secure_storage.dart::FlutterSecureStorage"
+"flutter::src::widgets::framework.dart::State<T>" <|-- "hair_care_tracker::view::home_view.dart::_HomeViewState"
+
+class "hair_care_tracker::view::log_in_view.dart::LogInView" {
+  +_LogInViewState createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "hair_care_tracker::view::log_in_view.dart::LogInView"
+
+class "hair_care_tracker::view::log_in_view.dart::_LogInViewState" {
+  -TextEditingController _emailController
+  -TextEditingController _passwordController
+  -LogInController _logInController
+  +FlutterSecureStorage storage
+  -bool _obscureTextPassword
+  +Widget build()
+  -Widget _emailTextFieldBuilder()
+  -Widget _passwordTextFieldBuilder()
+  -Widget _togglePasswordVisibilityBuilder()
+  -Widget _logInBtnBuilder()
+  +void dispose()
+}
+
+"hair_care_tracker::view::log_in_view.dart::_LogInViewState" o-- "flutter::src::widgets::editable_text.dart::TextEditingController"
+"hair_care_tracker::view::log_in_view.dart::_LogInViewState" o-- "hair_care_tracker::controller::log_in_controller.dart::LogInController"
+"hair_care_tracker::view::log_in_view.dart::_LogInViewState" o-- "flutter_secure_storage::flutter_secure_storage.dart::FlutterSecureStorage"
+"flutter::src::widgets::framework.dart::State<T>" <|-- "hair_care_tracker::view::log_in_view.dart::_LogInViewState"
+
+class "hair_care_tracker::view::my_products_view.dart::MyProductsView" {
+  +_MyProductsViewState createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "hair_care_tracker::view::my_products_view.dart::MyProductsView"
+
+class "hair_care_tracker::view::my_products_view.dart::_MyProductsViewState" {
+  -List<Product> _products
+  -MyProductsController _myProductsController
+  +FlutterSecureStorage storage
+  +void initState()
+  +dynamic initialize()
+  +Widget build()
+  -Widget _productsListBuilder()
+  -Widget _rowBuilder()
+  -Widget _addProductBtnBuilder()
+  -Widget _saveBtnBuilder()
+  -Widget _discardBtnBuilder()
+}
+
+"hair_care_tracker::view::my_products_view.dart::_MyProductsViewState" o-- "hair_care_tracker::controller::my_products_controller.dart::MyProductsController"
+"hair_care_tracker::view::my_products_view.dart::_MyProductsViewState" o-- "flutter_secure_storage::flutter_secure_storage.dart::FlutterSecureStorage"
+"flutter::src::widgets::framework.dart::State<T>" <|-- "hair_care_tracker::view::my_products_view.dart::_MyProductsViewState"
+
+class "hair_care_tracker::view::owned_products_view.dart::OwnedProductsView" {
+  +_OwnedProductsViewState createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "hair_care_tracker::view::owned_products_view.dart::OwnedProductsView"
+
+class "hair_care_tracker::view::owned_products_view.dart::_OwnedProductsViewState" {
+  +FlutterSecureStorage storage
+  -MyProductsController _myProductsController
+  -List<Product> _products
+  +void initState()
+  +dynamic initialize()
+  +Widget build()
+  -Widget _productsListBuilder()
+  -Widget _rowBuilder()
+}
+
+"hair_care_tracker::view::owned_products_view.dart::_OwnedProductsViewState" o-- "flutter_secure_storage::flutter_secure_storage.dart::FlutterSecureStorage"
+"hair_care_tracker::view::owned_products_view.dart::_OwnedProductsViewState" o-- "hair_care_tracker::controller::my_products_controller.dart::MyProductsController"
+"flutter::src::widgets::framework.dart::State<T>" <|-- "hair_care_tracker::view::owned_products_view.dart::_OwnedProductsViewState"
+
+class "hair_care_tracker::view::picked_product_view.dart::PickedProductView" {
+  -Product _product
+  +_PickedProductViewState createState()
+}
+
+"hair_care_tracker::view::picked_product_view.dart::PickedProductView" o-- "hair_care_tracker::model::product.dart::Product"
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "hair_care_tracker::view::picked_product_view.dart::PickedProductView"
+
+class "hair_care_tracker::view::picked_product_view.dart::_PickedProductViewState" {
+  -Product _product
+  -TextEditingController _descriptionController
+  +void initState()
+  +Widget build()
+  -Widget _ingredientsListBuilder()
+  -Widget _rowBuilder()
+  -Widget _descriptionTextAreaBuilder()
+  +void dispose()
+}
+
+"hair_care_tracker::view::picked_product_view.dart::_PickedProductViewState" o-- "hair_care_tracker::model::product.dart::Product"
+"hair_care_tracker::view::picked_product_view.dart::_PickedProductViewState" o-- "flutter::src::widgets::editable_text.dart::TextEditingController"
+"flutter::src::widgets::framework.dart::State<T>" <|-- "hair_care_tracker::view::picked_product_view.dart::_PickedProductViewState"
+
+class "hair_care_tracker::view::profile_view.dart::ProfileView" {
+  +_ProfileViewState createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "hair_care_tracker::view::profile_view.dart::ProfileView"
+
+class "hair_care_tracker::view::profile_view.dart::_ProfileViewState" {
+  -TextEditingController _ageController
+  -TextEditingController _lengthController
+  -TextEditingController _problemsController
+  +FlutterSecureStorage storage
+  -ProfileController _profileController
+  +dynamic porosity
+  +dynamic curlType
+  +dynamic thickness
+  +dynamic denseness
+  +dynamic state
+  +void initState()
+  +void initialize()
+  +Widget build()
+  -Widget _ageTextFieldBuilder()
+  -Widget _lengthTextFieldBuilder()
+  -Widget _porosityDropdownBtnBuilder()
+  -Widget _stateDropdownBtnBuilder()
+  -Widget _curlTypeDropdownBtnBuilder()
+  -Widget _thicknessDropdownBtnBuilder()
+  -Widget _densenessDropdownBtnBuilder()
+  -Widget _problemsTextFieldBuilder()
+  -Widget _saveBtnBuilder()
+  -Widget _discardBtnBuilder()
+  +void dispose()
+}
+
+"hair_care_tracker::view::profile_view.dart::_ProfileViewState" o-- "flutter::src::widgets::editable_text.dart::TextEditingController"
+"hair_care_tracker::view::profile_view.dart::_ProfileViewState" o-- "flutter_secure_storage::flutter_secure_storage.dart::FlutterSecureStorage"
+"hair_care_tracker::view::profile_view.dart::_ProfileViewState" o-- "hair_care_tracker::controller::profile_controller.dart::ProfileController"
+"flutter::src::widgets::framework.dart::State<T>" <|-- "hair_care_tracker::view::profile_view.dart::_ProfileViewState"
+
+class "hair_care_tracker::view::routine_view.dart::RoutineView" {
+  -Routine _routine
+  +_RoutineViewState createState()
+}
+
+"hair_care_tracker::view::routine_view.dart::RoutineView" o-- "hair_care_tracker::model::routine.dart::Routine"
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "hair_care_tracker::view::routine_view.dart::RoutineView"
+
+class "hair_care_tracker::view::routine_view.dart::_RoutineViewState" {
+  -Routine _routine
+  -TextEditingController _descriptionController
+  -TextEditingController _effectsController
+  -TextEditingController _nameController
+  -RoutineController _routineController
+  +FlutterSecureStorage storage
+  -TabController _tabController
+  -List<Product> _products
+  +void initState()
+  -void _handleTabIndex()
+  +Widget build()
+  +Widget detailsTab()
+  +Widget productsTab()
+  -Widget _bottomButtons()
+  -Widget _nameTextFieldBuilder()
+  -Widget _effectsTextAreaBuilder()
+  -Widget _descriptionTextAreaBuilder()
+  -Widget _productsListBuilder()
+  -Widget _rowBuilder()
+  +void dispose()
+}
+
+"hair_care_tracker::view::routine_view.dart::_RoutineViewState" o-- "hair_care_tracker::model::routine.dart::Routine"
+"hair_care_tracker::view::routine_view.dart::_RoutineViewState" o-- "flutter::src::widgets::editable_text.dart::TextEditingController"
+"hair_care_tracker::view::routine_view.dart::_RoutineViewState" o-- "hair_care_tracker::controller::routine_controller.dart::RoutineController"
+"hair_care_tracker::view::routine_view.dart::_RoutineViewState" o-- "flutter_secure_storage::flutter_secure_storage.dart::FlutterSecureStorage"
+"hair_care_tracker::view::routine_view.dart::_RoutineViewState" o-- "flutter::src::material::tab_controller.dart::TabController"
+"flutter::src::widgets::framework.dart::State<T>" <|-- "hair_care_tracker::view::routine_view.dart::_RoutineViewState"
+"flutter::src::widgets::ticker_provider.dart::TickerProviderStateMixin<T>" <|-- "hair_care_tracker::view::routine_view.dart::_RoutineViewState"
+
+class "hair_care_tracker::view::search_product_view.dart::SearchProductView" {
+  +_SearchProductViewState createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "hair_care_tracker::view::search_product_view.dart::SearchProductView"
+
+class "hair_care_tracker::view::search_product_view.dart::_SearchProductViewState" {
+  -TextEditingController _searchController
+  +FlutterSecureStorage storage
+  -List<Product> _products
+  -List<Product> _productsToShow
+  +SearchProductController controller
+  +void initState()
+  +dynamic initialize()
+  +Widget build()
+  -Widget _searchTextFieldBuilder()
+  -Widget _searchBtnBuilder()
+  +void search()
+  -Widget _productsListBuilder()
+  -Widget _rowBuilder()
+}
+
+"hair_care_tracker::view::search_product_view.dart::_SearchProductViewState" o-- "flutter::src::widgets::editable_text.dart::TextEditingController"
+"hair_care_tracker::view::search_product_view.dart::_SearchProductViewState" o-- "flutter_secure_storage::flutter_secure_storage.dart::FlutterSecureStorage"
+"hair_care_tracker::view::search_product_view.dart::_SearchProductViewState" o-- "hair_care_tracker::controller::search_product_controller.dart::SearchProductController"
+"flutter::src::widgets::framework.dart::State<T>" <|-- "hair_care_tracker::view::search_product_view.dart::_SearchProductViewState"
+
+class "hair_care_tracker::view::sign_up_view.dart::SignUpView" {
+  +_SignUpViewState createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "hair_care_tracker::view::sign_up_view.dart::SignUpView"
+
+class "hair_care_tracker::view::sign_up_view.dart::_SignUpViewState" {
+  -TextEditingController _nicknameController
+  -TextEditingController _emailController
+  -TextEditingController _passwordController
+  -TextEditingController _repeatPasswordController
+  +FlutterSecureStorage storage
+  -SignUpController _signUpController
+  -bool _obscureTextPassword
+  -bool _obscureTextRepeatPassword
+  +Widget build()
+  -Widget _nicknameTextFieldBuilder()
+  -Widget _emailTextFieldBuilder()
+  -Widget _passwordTextFieldBuilder()
+  -Widget _togglePasswordVisibilityBuilder()
+  -Widget _repeatPasswordTextFieldBuilder()
+  -Widget _toggleRepeatPasswordVisibilityBuilder()
+  -Widget _signUpBtnBuilder()
+  -Widget _logInBtnBuilder()
+  +void dispose()
+}
+
+"hair_care_tracker::view::sign_up_view.dart::_SignUpViewState" o-- "flutter::src::widgets::editable_text.dart::TextEditingController"
+"hair_care_tracker::view::sign_up_view.dart::_SignUpViewState" o-- "flutter_secure_storage::flutter_secure_storage.dart::FlutterSecureStorage"
+"hair_care_tracker::view::sign_up_view.dart::_SignUpViewState" o-- "hair_care_tracker::controller::sign_up_controller.dart::SignUpController"
+"flutter::src::widgets::framework.dart::State<T>" <|-- "hair_care_tracker::view::sign_up_view.dart::_SignUpViewState"
+
+class "hair_care_tracker::view::start_view.dart::StartView" {
+  +_StartViewState createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "hair_care_tracker::view::start_view.dart::StartView"
+
+class "hair_care_tracker::view::start_view.dart::_StartViewState" {
+  +FlutterSecureStorage storage
+  +Widget build()
+  +void initState()
+  +void chooseScreen()
+}
+
+"hair_care_tracker::view::start_view.dart::_StartViewState" o-- "flutter_secure_storage::flutter_secure_storage.dart::FlutterSecureStorage"
+"flutter::src::widgets::framework.dart::State<T>" <|-- "hair_care_tracker::view::start_view.dart::_StartViewState"
+
+
+@enduml
